@@ -1,0 +1,20 @@
+{
+  "name": "apiintegration",
+  "version": "1.0.0",
+  "main": "index.js",
+"scripts": {
+  "compile": "tsc ./tasks.ts",
+  "execute": "node ./tasks.js",
+  "dev": "nodemon --watch tasks.ts --exec 'npm run compile && npm run execute'"
+},
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.3.0",
+    "nodemon": "^3.1.4",  
+    "typescript": "^5.5.4"
+  }
+}
