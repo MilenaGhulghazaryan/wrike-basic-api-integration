@@ -2,9 +2,8 @@
 
 This project is a simple script to map Wrike tasks into a custom JSON format and save the mapped tasks into a `tasks.json` file.
 
-## Features
+## Feature
 
-- Maps Wrike task properties to a specific format.
 - Saves the mapped tasks as a JSON file (`tasks.json`).
 
 ## Requirements
