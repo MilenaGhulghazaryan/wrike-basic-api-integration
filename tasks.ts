@@ -49,7 +49,7 @@ const transformTask = (task: WrikeTask): MappedTask => {
     };
 };
 
-async function requestWrike(url: string): Promise<any> {
+async function requestWrike(url: string) {
     const token = process.env.WRIKE_API_TOKEN;
 
     if (!token) {
@@ -71,9 +71,9 @@ async function requestWrike(url: string): Promise<any> {
     return await response.json();
 }
 
-async function getTasks(): Promise<MappedTask[]> {
+async function getTasks() {
     const result = await requestWrike("https://www.wrike.com/api/v4/tasks/");
-    return result.data.map(transformTask)
+    return result.data.map(transformTask);
 }
 
 async function saveToFile(data: object) {
