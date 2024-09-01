@@ -1,20 +1,16 @@
 import * as fs from 'fs';
-require('dotenv').config();
+// require('dotenv').config(); 
+import 'dotenv/config';
 
 type WrikeTask = {
     id: string;
     accountId: string;
     title: string;
-    status: string;
     parentIds: string[];
     importance: string;
     createdDate: string;
     updatedDate: string;
-    dates: object;
-    scope: string;
-    customStatusId: string;
     permalink: string;
-    priority: string;
 };
 
 type MappedTask = {
@@ -25,11 +21,7 @@ type MappedTask = {
     collections: string[];
     created_at: string;
     updated_at: string;
-    dates: object;
-    scope: string;
-    customStatusId: string;
     ticket_url: string;
-    priority: string;
 };
 
 const transformTask = (task: WrikeTask): MappedTask => {
@@ -41,11 +33,7 @@ const transformTask = (task: WrikeTask): MappedTask => {
         collections: task.parentIds,
         created_at: task.createdDate,
         updated_at: task.updatedDate,
-        dates: task.dates,
-        scope: task.scope,
-        customStatusId: task.customStatusId,
         ticket_url: task.permalink,
-        priority: task.priority
     };
 };
 
@@ -83,7 +71,7 @@ async function saveToFile(data: object) {
     fs.writeFileSync('tasks.json', JSON.stringify(data, null, 2));
 }
 
-async function main() {
+export async function tasks() {
     try {
         const tasks = await getTasks();
         await saveToFile(tasks);
@@ -91,5 +79,3 @@ async function main() {
         console.error('An error occurred:', error);
     }
 }
-
-main();

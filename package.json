@@ -1,11 +1,10 @@
 {
   "name": "apiintegration",
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "compile": "tsc ./tasks.ts",
-    "execute": "node ./tasks.js",
-    "dev": "nodemon --watch tasks.ts --exec 'npm run compile && npm run execute'"
+    "build": "tsc",
+    "dev": "ts-node src/app.ts"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +13,7 @@
   "devDependencies": {
     "@types/node": "^22.3.0",
     "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {
