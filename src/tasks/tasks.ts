@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-// require('dotenv').config(); 
 import 'dotenv/config';
 
 type WrikeTask = {
@@ -56,7 +55,7 @@ async function requestWrike(url: string) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
 
-    return await response.json();
+    return  response.json();
 }
 
 async function getTasks() {

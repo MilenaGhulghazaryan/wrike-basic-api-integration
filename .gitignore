@@ -1,0 +1,8 @@
+# Node modules directory
+node_modules/
+
+# TypeScript build output
+dist/
+
+# Environment variable files
+.env
