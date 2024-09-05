@@ -1,11 +1,3 @@
-# Wrike Task Mapper
-
-This project is a simple script to map Wrike tasks into a custom JSON format and save the mapped tasks into a `tasks.json` file.
-
-## Feature
-
-- Saves the mapped tasks as a JSON file (`tasks.json`).
-
 ## Requirements
 
 - Node.js (v20 or higher)
@@ -20,3 +12,5 @@ npm install
 ```bash
 npm run dev
 ```
+
+3. Add .env file and there WRIKE_API_TOKEN

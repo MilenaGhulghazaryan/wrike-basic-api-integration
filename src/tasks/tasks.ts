@@ -55,7 +55,7 @@ async function requestWrike(url: string) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
 
-    return  response.json();
+    return response.json();
 }
 
 async function getTasks() {
@@ -67,7 +67,12 @@ async function saveToFile(data: object) {
     if (!data) {
         throw new Error("Cannot save undefined data to file");
     }
-    fs.writeFileSync('tasks.json', JSON.stringify(data, null, 2));
+    fs.writeFile('tasks.json', JSON.stringify(data, null, 2), (err) => {
+        if (err) {
+            console.error('Error:', err)
+        }
+        console.log("Tasks data saved successfully!");
+    })
 }
 
 export async function tasks() {
