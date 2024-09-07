@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import * as fs from 'fs';
 
-type WrikeProject = {
+interface WrikeProject {
     id: string;
     title: string;
     children: string[];
@@ -9,7 +9,7 @@ type WrikeProject = {
     scope: string;
 }
 
-type MappedProject = {
+interface MappedProject {
     id: string;
     name: string;
     children: string[];
@@ -67,6 +67,6 @@ export async function projects() {
         const projects = await getProjects();
         saveToFile(projects);
     } catch (err) {
-        console.log(err);
+        console.error('An error occurred:', err);
     }
 }
