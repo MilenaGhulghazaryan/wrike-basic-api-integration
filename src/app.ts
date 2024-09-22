@@ -1,11 +1,9 @@
 import { projects } from "./projects/projects";
-import { tasks } from "./tasks/tasks"
-import { users } from "./users/users";
+import { tasks } from "./tasks/tasks";
 
 async function app() {
-    await tasks();
-    await users();
     await projects();
+    await tasks();
 }
 
 app().catch(err => {

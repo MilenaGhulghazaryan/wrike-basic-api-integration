@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import 'dotenv/config';
+import { saveToFile } from '../projects/projects'
+
 
 type WrikeTask = {
     id: string;
@@ -22,6 +24,15 @@ type MappedTask = {
     updated_at: string;
     ticket_url: string;
 };
+
+interface MappedProject {
+    forEach(arg0: (el: any) => void): unknown;
+    id: string;
+    name: string;
+    children: string[] | [];
+    childrenIds: string[];
+    scope: string;
+}
 
 const transformTask = (task: WrikeTask): MappedTask => {
     return {
@@ -63,23 +74,37 @@ async function getTasks() {
     return result.data.map(transformTask);
 }
 
-async function saveToFile(data: object) {
-    if (!data) {
-        throw new Error("Cannot save undefined data to file");
-    }
-    fs.writeFile('tasks.json', JSON.stringify(data, null, 2), (err) => {
-        if (err) {
-            console.error('Error:', err)
-        }
-        console.log("Tasks data saved successfully!");
-    })
+
+function readProjectsFile(): Promise<any> {
+    return new Promise((resolve, reject) => {
+        fs.readFile("tasks.json", 'utf8', (err, data) => {
+            if (err) {
+                return reject(err);
+            }
+            try {
+                const projectsData = JSON.parse(data);
+                resolve(projectsData);
+            } catch (error) {
+                reject('Error parsing JSON');
+            }
+        });
+    });
 }
 
 export async function tasks() {
     try {
-        const tasks = await getTasks();
-        await saveToFile(tasks);
+        const taskData = await getTasks();
+        const readFile: MappedProject = await readProjectsFile()
+
+        readFile.forEach(el => {
+            el.childrenIds.push(...taskData.map((task: string) => task));
+        });
+
+        const newData = JSON.stringify(readFile, null, 2)
+        const parsedData = JSON.parse(newData);
+        await saveToFile(parsedData)
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
+

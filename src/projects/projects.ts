@@ -50,22 +50,27 @@ async function getProjects() {
     return result.data.map(transformProject);
 }
 
-function saveToFile(data: object) {
-    if (!data) {
-        throw new Error("Cannot save undefined data to file");
-    }
-    fs.writeFile('projects.json', JSON.stringify(data, null, 2), (err) => {
-        if (err) {
-            console.error('Error:', err)
+export async function saveToFile(data: object): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (!data) {
+            return reject(new Error("Cannot save undefined data to file"));
         }
-        console.log("Projects data saved successfully!");
-    })
+
+        fs.writeFile('tasks.json', JSON.stringify(data, null, 2), (err) => {
+            if (err) {
+                return reject(err)
+            }
+            resolve()
+            console.log("Data saved successfully!");
+        })
+    });
 }
+
 
 export async function projects() {
     try {
         const projects = await getProjects();
-        saveToFile(projects);
+        await saveToFile(projects);
     } catch (err) {
         console.error('An error occurred:', err);
     }
