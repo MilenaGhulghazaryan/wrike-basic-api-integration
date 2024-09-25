@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { saveToFile } from '../projects/projects'
 
 
-type WrikeTask = {
+interface WrikeTask {
     id: string;
     accountId: string;
     title: string;
@@ -14,7 +14,7 @@ type WrikeTask = {
     permalink: string;
 };
 
-type MappedTask = {
+interface MappedTask {
     id: string;
     name: string;
     assignee: string;
@@ -74,19 +74,13 @@ async function getTasks() {
     return result.data.map(transformTask);
 }
 
-
 function readProjectsFile(): Promise<any> {
     return new Promise((resolve, reject) => {
         fs.readFile("tasks.json", 'utf8', (err, data) => {
             if (err) {
-                return reject(err);
+                return reject(new Error(`Failed to read file: ${err.message}`));
             }
-            try {
-                const projectsData = JSON.parse(data);
-                resolve(projectsData);
-            } catch (error) {
-                reject('Error parsing JSON');
-            }
+            resolve(JSON.parse(data));
         });
     });
 }
@@ -97,14 +91,14 @@ export async function tasks() {
         const readFile: MappedProject = await readProjectsFile()
 
         readFile.forEach(el => {
-            el.childrenIds.push(...taskData.map((task: string) => task));
-        });
-
-        const newData = JSON.stringify(readFile, null, 2)
-        const parsedData = JSON.parse(newData);
-        await saveToFile(parsedData)
+            if (!el.children) {
+                el.children = [];
+            }
+            el.children.push(...taskData);
+        })
+        await saveToFile(readFile)
+        console.log("Tasks updated successfully!");
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
-

@@ -66,7 +66,6 @@ export async function saveToFile(data: object): Promise<void> {
     });
 }
 
-
 export async function projects() {
     try {
         const projects = await getProjects();
