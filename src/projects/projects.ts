@@ -50,7 +50,7 @@ async function getProjects() {
     return result.data.map(transformProject);
 }
 
-export async function saveToFile(data: object): Promise<void> {
+export function saveToFile(data: object): Promise<void> {
     return new Promise((resolve, reject) => {
         if (!data) {
             return reject(new Error("Cannot save undefined data to file"));
