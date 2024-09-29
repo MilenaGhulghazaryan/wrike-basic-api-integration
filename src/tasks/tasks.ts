@@ -17,7 +17,7 @@ interface WrikeTask {
 interface MappedTask {
     id: string;
     name: string;
-    assignee: string;
+    assignees: [];
     status: string;
     collections: string[];
     created_at: string;
@@ -29,7 +29,7 @@ interface MappedProject {
     forEach(arg0: (el: any) => void): unknown;
     id: string;
     name: string;
-    children: string[] | [];
+    tasks: string[] | [];
     childrenIds: string[];
     scope: string;
 }
@@ -38,7 +38,7 @@ const transformTask = (task: WrikeTask): MappedTask => {
     return {
         id: task.id,
         name: task.title,
-        assignee: task.accountId,
+        assignees: [],
         status: task.importance,
         collections: task.parentIds,
         created_at: task.createdDate,
@@ -91,11 +91,12 @@ export async function tasks() {
         const readFile: MappedProject = await readProjectsFile()
 
         readFile.forEach(el => {
-            if (!el.children) {
-                el.children = [];
+            if (!el.tasks) {
+                el.tasks = [];
             }
-            el.children.push(...taskData);
+            el.tasks.push(...taskData);
         })
+
         await saveToFile(readFile)
         console.log("Tasks updated successfully!");
     } catch (error) {

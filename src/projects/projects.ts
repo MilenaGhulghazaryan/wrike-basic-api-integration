@@ -5,7 +5,6 @@ interface WrikeProject {
     id: string;
     title: string;
     children: string[];
-    childIds: string[];
     scope: string;
 }
 
@@ -13,7 +12,6 @@ interface MappedProject {
     id: string;
     name: string;
     children: string[];
-    childrenIds: string[];
     scope: string;
 }
 
@@ -22,7 +20,6 @@ const transformProject = (project: WrikeProject): MappedProject => {
         id: project.id,
         name: project.title,
         children: project.children,
-        childrenIds: project.childIds,
         scope: project.scope
     }
 }
