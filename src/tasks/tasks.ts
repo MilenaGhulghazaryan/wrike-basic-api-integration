@@ -1,49 +1,43 @@
-import * as fs from 'fs';
 import 'dotenv/config';
-import { saveToFile } from '../projects/projects'
-
 
 interface WrikeTask {
     id: string;
-    accountId: string;
+    accountId: string[] | [];
+
     title: string;
     parentIds: string[];
     importance: string;
     createdDate: string;
     updatedDate: string;
     permalink: string;
+    authorIds: string[];
+
 };
 
 interface MappedTask {
     id: string;
     name: string;
-    assignees: [];
+    assignees: string[] | [];
     status: string;
     collections: string[];
     created_at: string;
     updated_at: string;
     ticket_url: string;
+
 };
 
-interface MappedProject {
-    forEach(arg0: (el: any) => void): unknown;
-    id: string;
-    name: string;
-    tasks: string[] | [];
-    childrenIds: string[];
-    scope: string;
-}
 
 const transformTask = (task: WrikeTask): MappedTask => {
     return {
         id: task.id,
         name: task.title,
-        assignees: [],
+        assignees: task.accountId,
         status: task.importance,
         collections: task.parentIds,
         created_at: task.createdDate,
         updated_at: task.updatedDate,
         ticket_url: task.permalink,
+
     };
 };
 
@@ -74,31 +68,12 @@ async function getTasks() {
     return result.data.map(transformTask);
 }
 
-function readProjectsFile(): Promise<any> {
-    return new Promise((resolve, reject) => {
-        fs.readFile("tasks.json", 'utf8', (err, data) => {
-            if (err) {
-                return reject(new Error(`Failed to read file: ${err.message}`));
-            }
-            resolve(JSON.parse(data));
-        });
-    });
-}
+
 
 export async function tasks() {
     try {
         const taskData = await getTasks();
-        const readFile: MappedProject = await readProjectsFile()
-
-        readFile.forEach(el => {
-            if (!el.tasks) {
-                el.tasks = [];
-            }
-            el.tasks.push(...taskData);
-        })
-
-        await saveToFile(readFile)
-        console.log("Tasks updated successfully!");
+        return taskData;
     } catch (error) {
         console.error('An error occurred:', error);
     }

@@ -1,17 +1,16 @@
 import 'dotenv/config';
-import * as fs from 'fs';
 
 interface WrikeProject {
     id: string;
     title: string;
-    children: string[];
+    tasks: [];
     scope: string;
 }
 
 interface MappedProject {
     id: string;
     name: string;
-    children: string[];
+    tasks: [];
     scope: string;
 }
 
@@ -19,7 +18,7 @@ const transformProject = (project: WrikeProject): MappedProject => {
     return {
         id: project.id,
         name: project.title,
-        children: project.children,
+        tasks: project.tasks,
         scope: project.scope
     }
 }
@@ -47,27 +46,12 @@ async function getProjects() {
     return result.data.map(transformProject);
 }
 
-export function saveToFile(data: object): Promise<void> {
-    return new Promise((resolve, reject) => {
-        if (!data) {
-            return reject(new Error("Cannot save undefined data to file"));
-        }
-
-        fs.writeFile('tasks.json', JSON.stringify(data, null, 2), (err) => {
-            if (err) {
-                return reject(err)
-            }
-            resolve()
-            console.log("Data saved successfully!");
-        })
-    });
-}
-
 export async function projects() {
     try {
-        const projects = await getProjects();
-        await saveToFile(projects);
+        const projectData = await getProjects();
+        return projectData;
     } catch (err) {
         console.error('An error occurred:', err);
+        throw err;
     }
 }
