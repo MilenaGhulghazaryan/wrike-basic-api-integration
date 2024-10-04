@@ -2,8 +2,7 @@ import 'dotenv/config';
 
 interface WrikeTask {
     id: string;
-    accountId: string[] | [];
-
+    accountId: string[];
     title: string;
     parentIds: string[];
     importance: string;
@@ -17,7 +16,7 @@ interface WrikeTask {
 interface MappedTask {
     id: string;
     name: string;
-    assignees: string[] | [];
+    assignees: string[];
     status: string;
     collections: string[];
     created_at: string;
