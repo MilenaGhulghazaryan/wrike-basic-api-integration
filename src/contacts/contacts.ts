@@ -1,9 +1,17 @@
 interface WrikeContact {
-    profiles: string[];
     id: string;
     firstName: string;
     lastName: string;
-    profilePicture: string;
+    profiles: string[];
+}
+
+const wrikeContact = (project: WrikeContact) => {
+    return {
+        id: project.id,
+        firstName: project.firstName,
+        lastName: project.lastName,
+        profiles: project.profiles,
+    }
 }
 
 async function requestWrikeContacts(url: string) {
@@ -28,9 +36,9 @@ async function requestWrikeContacts(url: string) {
     return response.json();
 }
 
-async function getContacts(): Promise<WrikeContact[]> {
+async function getContacts() {
     const result = await requestWrikeContacts('https://www.wrike.com/api/v4/contacts');
-    return result.data;
+    return result.data.map(wrikeContact);
 }
 
 export async function contacts() {

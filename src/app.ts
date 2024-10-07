@@ -14,7 +14,6 @@ function saveToFile(data: object): Promise<void> {
                 console.error('Error saving file:', err);
                 return reject(err);
             }
-
             console.log("Data saved successfully!");
             resolve();
         });
@@ -28,24 +27,17 @@ async function app() {
         const contactsData = await contacts();
 
         projectData.forEach((project: any) => {
-
             project.tasks = taskData.filter((task: { id: any; }) => task.id === project.id);
 
             project.tasks = project.tasks.concat(taskData);
 
             project.tasks.forEach((task: any) => {
-                if (typeof task.assignees === 'string') {
-                    task.assignees = task.assignees.split(',');
-
-                    contactsData?.forEach((contact) => {
-                        contact.profiles.forEach((account: any) => {
-                            if (task.assignees.includes(account.accountId)) {
-                                task.assignees.push(account);
-                            }
-                        });
-                    });
-                }
-            });
+                contactsData?.forEach((contact: any) => {
+                    if (task.assignees.includes(contact.id)) {
+                        task.assignees.push(contact)
+                    }
+                })
+            })
         });
 
         saveToFile(projectData)

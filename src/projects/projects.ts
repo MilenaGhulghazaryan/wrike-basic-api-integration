@@ -3,14 +3,14 @@ import 'dotenv/config';
 interface WrikeProject {
     id: string;
     title: string;
-    tasks: [];
+    tasks: string[];
     scope: string;
 }
 
 interface MappedProject {
     id: string;
     name: string;
-    tasks: [];
+    tasks: string[];
     scope: string;
 }
 
@@ -52,6 +52,6 @@ export async function projects() {
         return projectData;
     } catch (err) {
         console.error('An error occurred:', err);
-        throw err;
+        // throw err;
     }
 }
