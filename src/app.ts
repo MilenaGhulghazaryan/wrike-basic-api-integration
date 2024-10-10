@@ -27,9 +27,7 @@ async function app() {
         const contactsData = await contacts();
 
         projectData.forEach((project: any) => {
-            project.tasks = taskData.filter((task: { id: any; }) => task.id === project.id);
-
-            project.tasks = project.tasks.concat(taskData);
+            project.tasks = taskData.filter((task: any) => task.collections.includes(project.id));
 
             project.tasks.forEach((task: any) => {
                 contactsData?.forEach((contact: any) => {

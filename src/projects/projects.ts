@@ -52,6 +52,5 @@ export async function projects() {
         return projectData;
     } catch (err) {
         console.error('An error occurred:', err);
-        // throw err;
     }
 }
