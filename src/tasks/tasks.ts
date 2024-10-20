@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { requestWrike } from '../wrikeApi'; 
 
 interface WrikeTask {
     id: string;
@@ -10,7 +11,6 @@ interface WrikeTask {
     permalink: string;
     authorIds: string[];
     responsibleIds: string[];
-
 };
 
 interface MappedTask {
@@ -22,6 +22,7 @@ interface MappedTask {
     created_at: string;
     updated_at: string;
     ticket_url: string;
+    responsibleIds: string[];
 };
 
 
@@ -29,8 +30,9 @@ const transformTask = (task: WrikeTask): MappedTask => {
     return {
         id: task.id,
         name: task.title,
-        assignees: task.responsibleIds,
+        assignees: [],
         status: task.importance,
+        responsibleIds: task.responsibleIds,
         collections: task.parentIds,
         created_at: task.createdDate,
         updated_at: task.updatedDate,
@@ -38,40 +40,13 @@ const transformTask = (task: WrikeTask): MappedTask => {
     };
 };
 
-async function requestWrike(url: string) {
-    const token = process.env.WRIKE_API_TOKEN;
-
-    if (!token) {
-        throw new Error('API token is missing');
-    }
-
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-    }
-
-    return response.json();
-}
 
 async function getTasks() {
     const result = await requestWrike(`https://www.wrike.com/api/v4/tasks/?fields=["parentIds","responsibleIds"]`);
     return result.data.map(transformTask);
 }
 
-
-
-export async function tasks() {
-    try {
-        const taskData = await getTasks();
-        return taskData;
-    } catch (error) {
-        console.error('An error occurred:', error);
-    }
+export function tasks() {
+    const taskData = getTasks();
+    return taskData;
 }

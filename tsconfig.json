@@ -5,13 +5,13 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }

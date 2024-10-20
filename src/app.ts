@@ -21,27 +21,41 @@ function saveToFile(data: object): Promise<void> {
 }
 
 async function app() {
-    try {
-        const projectData = await projects();
-        const taskData = await tasks();
-        const contactsData = await contacts();
+    const projectData = await projects();
+    const taskData = await tasks();
+    const contactsData = await contacts();
 
-        projectData.forEach((project: any) => {
-            project.tasks = taskData.filter((task: any) => task.collections.includes(project.id));
 
-            project.tasks.forEach((task: any) => {
-                contactsData?.forEach((contact: any) => {
-                    if (task.assignees.includes(contact.id)) {
-                        task.assignees.push(contact)
-                    }
-                })
-            })
-        });
+    const recursia = (element: any, projectDatas: any, contactDatas: any) => {
+        if (Array.isArray(element)) {
+            element.forEach(item => recursia(item, projectDatas, contactDatas));
+            return;
+        }
 
-        saveToFile(projectData)
-    } catch (err) {
-        console.error('Error:', err);
-    }
+        if (Array.isArray(projectDatas) && Array.isArray(contactDatas)) {
+            projectDatas.forEach(project => recursia(element, project, contactDatas));
+            contactDatas.forEach(contact => recursia(element, projectDatas, contact))
+            return;
+        }
+        if (typeof element === 'object' && element !== null &&
+            typeof projectDatas === 'object' && projectDatas !== null &&
+            typeof contactDatas === 'object' && contactDatas !== null) {
+
+            let collection = element.collections?.filter((colId: any) => colId === projectDatas.id) || [];
+            let responsibleId = element.responsibleIds?.filter((respId: any) => respId === contactDatas.id)
+
+            if (collection.length > 0) {
+                projectDatas.tasks.push(element);
+            }
+            if (Array.isArray(element.assignees) && responsibleId.length > 0) {
+                element.assignees.push(contactDatas);
+            }
+        }
+    };
+
+    recursia(taskData, projectData, contactsData);
+
+    saveToFile(projectData)
 }
 
 app().catch(err => {
