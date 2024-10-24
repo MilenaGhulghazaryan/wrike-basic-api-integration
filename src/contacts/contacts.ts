@@ -1,12 +1,12 @@
 import { requestWrike } from "../wrikeApi";
 
-interface WrikeContact {
+interface IWrikeContact {
     id: string;
     firstName: string;
     lastName: string;
 }
 
-const wrikeContact = (project: WrikeContact) => {
+function wrikeContact(project: IWrikeContact) {
     return {
         id: project.id,
         firstName: project.firstName,

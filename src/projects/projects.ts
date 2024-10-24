@@ -1,21 +1,21 @@
 import 'dotenv/config';
 import { requestWrike } from '../wrikeApi';
 
-interface WrikeProject {
+interface IWrikeProject {
     id: string;
     title: string;
     tasks: string[];
     scope: string;
 }
 
-interface MappedProject {
+interface IMappedProject {
     id: string;
     name: string;
     tasks: string[];
     scope: string;
 }
 
-const transformProject = (project: WrikeProject): MappedProject => {
+function transformProject(project: IWrikeProject): IMappedProject {
     return {
         id: project.id,
         name: project.title,

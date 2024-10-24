@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { requestWrike } from '../wrikeApi'; 
+import { requestWrike } from '../wrikeApi';
 
-interface WrikeTask {
+interface IWrikeTask {
     id: string;
     title: string;
     parentIds: string[];
@@ -13,7 +13,7 @@ interface WrikeTask {
     responsibleIds: string[];
 };
 
-interface MappedTask {
+interface IMappedTask {
     id: string;
     name: string;
     assignees: string[];
@@ -25,8 +25,7 @@ interface MappedTask {
     responsibleIds: string[];
 };
 
-
-const transformTask = (task: WrikeTask): MappedTask => {
+function transformTask(task: IWrikeTask): IMappedTask {
     return {
         id: task.id,
         name: task.title,
